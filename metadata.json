@@ -1,0 +1,6 @@
+{
+  "name": "Disaster Dashboard",
+  "description": "Tactical SOTA multilingual disaster intelligence and crisis informatics system in India, showing real-time news and social feeds with SOTA model predictions, training logs, and evaluations.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

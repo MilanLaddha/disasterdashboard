@@ -1,0 +1,78 @@
+{
+  "tasks": {
+    "disaster_classification": {
+      "mt5": { "accuracy": 0.812, "precision": 0.805, "recall": 0.810, "f1": 0.807, "latency": "45ms" },
+      "indicbart": { "accuracy": 0.734, "precision": 0.720, "recall": 0.730, "f1": 0.725, "latency": "50ms" },
+      "mbart": { "accuracy": 0.772, "precision": 0.760, "recall": 0.768, "f1": 0.764, "latency": "70ms" }
+    },
+    "location_extraction": {
+      "mt5": { "precision": 0.742, "recall": 0.720, "f1": 0.731, "latency": "60ms" },
+      "indicbart": { "precision": 0.758, "recall": 0.762, "f1": 0.760, "latency": "52ms" },
+      "mbart": { "precision": 0.730, "recall": 0.740, "f1": 0.735, "latency": "82ms" }
+    },
+    "translation": {
+      "mt5": { "bleu": 28.4, "latency": "85ms" },
+      "indicbart": { "bleu": 33.1, "latency": "72ms" },
+      "mbart": { "bleu": 38.5, "latency": "78ms" }
+    },
+    "sentiment": {
+      "mt5": { "accuracy": 0.785, "precision": 0.772, "recall": 0.780, "f1": 0.776, "latency": "48ms" },
+      "indicbart": { "accuracy": 0.710, "precision": 0.702, "recall": 0.708, "f1": 0.705, "latency": "55ms" },
+      "mbart": { "accuracy": 0.754, "precision": 0.745, "recall": 0.750, "f1": 0.747, "latency": "68ms" }
+    },
+    "summarization": {
+      "mt5": { "rouge1": 0.395, "rougeL": 0.362, "latency": "95ms" },
+      "indicbart": { "rouge1": 0.345, "rougeL": 0.312, "latency": "110ms" },
+      "mbart": { "rouge1": 0.378, "rougeL": 0.348, "latency": "135ms" }
+    }
+  },
+  "confusion_matrices": {
+    "mt5": [
+      { "actual": "Flood", "predictedFlood": 42, "predictedLandslide": 2, "predictedCyclone": 3, "predictedEarthquake": 1, "predictedOther": 2 },
+      { "actual": "Landslide", "predictedFlood": 1, "predictedLandslide": 38, "predictedCyclone": 0, "predictedEarthquake": 1, "predictedOther": 5 },
+      { "actual": "Cyclone", "predictedFlood": 3, "predictedLandslide": 1, "predictedCyclone": 45, "predictedEarthquake": 0, "predictedOther": 1 },
+      { "actual": "Earthquake", "predictedFlood": 0, "predictedLandslide": 2, "predictedCyclone": 0, "predictedEarthquake": 48, "predictedOther": 0 },
+      { "actual": "Other", "predictedFlood": 5, "predictedLandslide": 4, "predictedCyclone": 2, "predictedEarthquake": 1, "predictedOther": 35 }
+    ],
+    "indicbart": [
+      { "actual": "Flood", "predictedFlood": 38, "predictedLandslide": 3, "predictedCyclone": 4, "predictedEarthquake": 2, "predictedOther": 3 },
+      { "actual": "Landslide", "predictedFlood": 2, "predictedLandslide": 34, "predictedCyclone": 1, "predictedEarthquake": 2, "predictedOther": 6 },
+      { "actual": "Cyclone", "predictedFlood": 4, "predictedLandslide": 2, "predictedCyclone": 40, "predictedEarthquake": 1, "predictedOther": 3 },
+      { "actual": "Earthquake", "predictedFlood": 1, "predictedLandslide": 3, "predictedCyclone": 1, "predictedEarthquake": 43, "predictedOther": 2 },
+      { "actual": "Other", "predictedFlood": 6, "predictedLandslide": 5, "predictedCyclone": 3, "predictedEarthquake": 2, "predictedOther": 30 }
+    ],
+    "mbart": [
+      { "actual": "Flood", "predictedFlood": 40, "predictedLandslide": 2, "predictedCyclone": 3, "predictedEarthquake": 1, "predictedOther": 4 },
+      { "actual": "Landslide", "predictedFlood": 1, "predictedLandslide": 36, "predictedCyclone": 0, "predictedEarthquake": 2, "predictedOther": 6 },
+      { "actual": "Cyclone", "predictedFlood": 3, "predictedLandslide": 1, "predictedCyclone": 42, "predictedEarthquake": 1, "predictedOther": 3 },
+      { "actual": "Earthquake", "predictedFlood": 0, "predictedLandslide": 2, "predictedCyclone": 0, "predictedEarthquake": 46, "predictedOther": 2 },
+      { "actual": "Other", "predictedFlood": 5, "predictedLandslide": 4, "predictedCyclone": 2, "predictedEarthquake": 2, "predictedOther": 32 }
+    ]
+  },
+  "roc_curves": [
+    { "fpr": 0.0, "mT5": 0.0, "IndicBART": 0.0, "mBART50": 0.0 },
+    { "fpr": 0.1, "mT5": 0.35, "IndicBART": 0.28, "mBART50": 0.32 },
+    { "fpr": 0.2, "mT5": 0.58, "IndicBART": 0.45, "mBART50": 0.52 },
+    { "fpr": 0.3, "mT5": 0.72, "IndicBART": 0.58, "mBART50": 0.65 },
+    { "fpr": 0.4, "mT5": 0.81, "IndicBART": 0.68, "mBART50": 0.74 },
+    { "fpr": 0.5, "mT5": 0.88, "IndicBART": 0.76, "mBART50": 0.81 },
+    { "fpr": 0.6, "mT5": 0.92, "IndicBART": 0.82, "mBART50": 0.87 },
+    { "fpr": 0.7, "mT5": 0.95, "IndicBART": 0.88, "mBART50": 0.91 },
+    { "fpr": 0.8, "mT5": 0.97, "IndicBART": 0.93, "mBART50": 0.95 },
+    { "fpr": 0.9, "mT5": 0.99, "IndicBART": 0.97, "mBART50": 0.98 },
+    { "fpr": 1.0, "mT5": 1.0, "IndicBART": 1.0, "mBART50": 1.0 }
+  ],
+  "pr_curves": [
+    { "recall": 0.0, "mT5": 1.0, "IndicBART": 1.0, "mBART50": 1.0 },
+    { "recall": 0.1, "mT5": 0.98, "IndicBART": 0.95, "mBART50": 0.97 },
+    { "recall": 0.2, "mT5": 0.96, "IndicBART": 0.91, "mBART50": 0.94 },
+    { "recall": 0.3, "mT5": 0.93, "IndicBART": 0.86, "mBART50": 0.90 },
+    { "recall": 0.4, "mT5": 0.89, "IndicBART": 0.80, "mBART50": 0.85 },
+    { "recall": 0.5, "mT5": 0.84, "IndicBART": 0.73, "mBART50": 0.79 },
+    { "recall": 0.6, "mT5": 0.78, "IndicBART": 0.65, "mBART50": 0.72 },
+    { "recall": 0.7, "mT5": 0.70, "IndicBART": 0.56, "mBART50": 0.63 },
+    { "recall": 0.8, "mT5": 0.60, "IndicBART": 0.45, "mBART50": 0.52 },
+    { "recall": 0.9, "mT5": 0.45, "IndicBART": 0.32, "mBART50": 0.38 },
+    { "recall": 1.0, "mT5": 0.25, "IndicBART": 0.15, "mBART50": 0.20 }
+  ]
+}
