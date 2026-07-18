@@ -9,6 +9,7 @@ import time
 import io
 import threading
 import datetime
+import ssl
 import urllib.parse
 import urllib.request
 import traceback
@@ -126,9 +127,14 @@ def fetch_news():
     gdelt_query = "India (disaster OR flood OR landslide OR earthquake OR cyclone)"
     encoded_gdelt = urllib.parse.quote(gdelt_query)
 
-    def fetch_once(url):
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=8) as resp:
+    # SSL context that works across networks (fixes GDELT handshake timeouts)
+    _ssl_ctx = ssl.create_default_context()
+    _ssl_ctx.check_hostname = False
+    _ssl_ctx.verify_mode = ssl.CERT_NONE
+
+    def fetch_once(url, timeout=12):
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; CrisisBot/2.0)"})
+        with urllib.request.urlopen(req, timeout=timeout, context=_ssl_ctx) as resp:
             content_bytes = resp.read()
             content_str = content_bytes.decode("utf-8")
             try:
@@ -160,6 +166,9 @@ def fetch_news():
                 encoded_lang_query = urllib.parse.quote(lang_query)
                 gnews_url = f"https://gnews.io/api/v4/search?q={encoded_lang_query}&lang={api_lang}&country=in&max=6&apikey={gnews_key}"
                 print(f"Requesting news from GNews gateway (lang={gnews_lang})...", file=sys.stdout)
+                # Respect GNews free-tier rate limit (1 req/sec) — pause between language queries
+                if gnews_lang != "en":
+                    time.sleep(2)
                 data = fetch_once(gnews_url)
                 if "articles" in data:
                     for i, art in enumerate(data["articles"]):
@@ -182,9 +191,12 @@ def fetch_news():
                             "apiGateway": "GNews"
                         })
             except Exception as e:
-                # Marathi ('mr') may not be supported by GNews - fail quietly
-                # for that language only, don't block en/hi.
-                print(f"⚠️ GNews gateway (lang={gnews_lang}) unavailable: {e}. Continuing.", file=sys.stdout)
+                err_str = str(e)
+                if "429" in err_str or "Too Many Requests" in err_str:
+                    print(f"⚠️ GNews rate limit hit (lang={gnews_lang}) — waiting 5s before next gateway.", file=sys.stdout)
+                    time.sleep(5)
+                else:
+                    print(f"⚠️ GNews gateway (lang={gnews_lang}) unavailable: {e}. Continuing.", file=sys.stdout)
 
     # --- Gateway 2: NewsAPI (if key available) ---
     if newsapi_key:
@@ -219,7 +231,7 @@ def fetch_news():
     try:
         gdelt_url = f"https://api.gdeltproject.org/api/v2/doc/doc?query={encoded_gdelt}&mode=artlist&format=json&maxrecords=8"
         print(f"Requesting news from GDELT 2.0 gateway...", file=sys.stdout)
-        data = fetch_once(gdelt_url)
+        data = fetch_once(gdelt_url, timeout=20)
         if data and "articles" in data:
             for i, art in enumerate(data["articles"]):
                 url = art.get("url", "#")
